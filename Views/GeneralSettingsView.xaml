@@ -1,0 +1,315 @@
+<UserControl x:Class="HoldSpace.Views.GeneralSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoldSpace.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="700"
+             Background="#0C0C0D"
+             SizeChanged="UserControl_SizeChanged">
+    
+    <UserControl.Resources>
+        <Style x:Key="SettingsTabItemStyle" TargetType="TabItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#8E8E93"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="Border" BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter x:Name="ContentSite" ContentSource="Header" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="#0A84FF"/>
+                                <Setter Property="BorderBrush" Value="#0A84FF"/>
+                                <Setter Property="Background" Value="#131315"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1C1C1E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Content -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="System Settings" Foreground="#F3F3F3" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="Configure launch behaviors, backup configuration, and manage app preferences." Foreground="#8E8E93" FontSize="12" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Main Tab Control -->
+        <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0" Padding="0">
+            <!-- Tab 1: General Preferences -->
+            <TabItem Header="General Preferences" Style="{StaticResource SettingsTabItemStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,16,0,0">
+                    <Grid x:Name="SettingsGrid" MaxWidth="1200" HorizontalAlignment="Stretch">
+                        
+                        <!-- System & Behavior Card -->
+                        <Border x:Name="CardBehavior" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="12" Padding="20" Margin="8">
+                            <StackPanel>
+                                <TextBlock Text="APPLICATION BEHAVIOR" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                                <!-- Start with Windows -->
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Start with Windows" Foreground="#F3F3F3" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Automatically launch HoldSpace when you sign in." Foreground="#8E8E93" FontSize="11" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <CheckBox Grid.Column="1" x:Name="CheckStartup" Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                              Checked="CheckStartup_Checked" Unchecked="CheckStartup_Unchecked"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,16"/>
+
+                                <!-- Minimize to Tray -->
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Minimize to System Tray" Foreground="#F3F3F3" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Hides dashboard to taskbar when closing window." Foreground="#8E8E93" FontSize="11" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <CheckBox Grid.Column="1" x:Name="CheckMinimize" Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                              Checked="CheckMinimize_Checked" Unchecked="CheckMinimize_Unchecked"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,16"/>
+
+                                <!-- Start Minimized to Tray -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Start Minimized to Tray" Foreground="#F3F3F3" FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Launch minimized in system tray directly on boot." Foreground="#8E8E93" FontSize="11" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <CheckBox Grid.Column="1" x:Name="CheckStartMinimized" Style="{StaticResource ToggleSwitchStyle}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                              Checked="CheckStartMinimized_Checked" Unchecked="CheckStartMinimized_Unchecked"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Backup & Restore Card -->
+                        <Border x:Name="CardBackup" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="12" Padding="20" Margin="8">
+                            <StackPanel>
+                                <TextBlock Text="BACKUP &amp; RESTORE" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Export Data Backup" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Save settings and custom shortcut profiles." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Export Backup" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnExportBackup_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Import Data Backup" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Restore your configuration from a backup file." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Import Backup" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnImportBackup_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="App Storage Directory" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Open folder containing configuration files." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Open Data Folder" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnOpenFolder_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Reset Options Card -->
+                        <Border x:Name="CardReset" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="12" Padding="20" Margin="8">
+                            <StackPanel>
+                                <TextBlock Text="RESET OPTIONS" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Reset Overlay Appearance" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Revert theme, opacity, and dim settings." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Reset Overlay" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnResetOverlay_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Reset Current Mode" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Revert shortcuts in the active Mode only." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Reset Mode" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnResetCurrentMode_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Reset All Settings" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Revert settings to factory defaults." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Factory Reset" Style="{StaticResource DangerButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnResetAll_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- About & Feedback Card -->
+                        <Border x:Name="CardAbout" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="12" Padding="20" Margin="8">
+                            <StackPanel>
+                                <TextBlock Text="ABOUT &amp; DIAGNOSTICS" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,16"/>
+                                
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="App Name" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="HoldSpace (Beta)" Foreground="#8E8E93" FontSize="13"/>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="App Version" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="0.1.0-beta" Foreground="#8E8E93" FontSize="13"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Send Feedback" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Copy issue report template to clipboard." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Copy Template" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnCopyFeedback_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Diagnostic Logs" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Open folder containing application logs." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Open Logs Folder" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnOpenLogs_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Export Diagnostics" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Generate a diagnostic ZIP report." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Export Report" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnExportDiag_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,4,0,12"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="Onboarding Setup" Foreground="#F3F3F3" FontSize="13" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Restart the onboarding tutorial setup." Foreground="#8E8E93" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Reset Onboarding" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnRestartOnboarding_Click"/>
+                                </Grid>
+
+                                <Border Height="1" Background="#262629" Margin="0,16"/>
+
+                                <TextBlock Text="HoldSpace is a productivity tool built to launch applications, folders, files, or websites instantly by holding down a trigger hotkey." 
+                                           Foreground="#8E8E93" FontSize="11" TextWrapping="Wrap" LineHeight="16"/>
+                                <TextBlock Text="Copyright © 2026 HoldSpace Team. All rights reserved." 
+                                           Foreground="#55555A" FontSize="10" Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Tab 2: Shortcut Directory -->
+            <TabItem Header="Shortcut Directory" Style="{StaticResource SettingsTabItemStyle}">
+                <Grid Margin="0,16,0,0">
+                    <local:ShortcutListView x:Name="ShortcutList"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

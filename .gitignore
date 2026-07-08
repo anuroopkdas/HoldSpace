@@ -1,0 +1,18 @@
+# Build outputs
+bin/
+obj/
+release/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# IDE folders
+.vs/
+.idea/
+.vscode/
+
+# Logs
+*.log

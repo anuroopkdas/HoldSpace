@@ -1,0 +1,127 @@
+<UserControl x:Class="HoldSpace.Views.ShortcutListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HoldSpace.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="700"
+             Background="#0C0C0D">
+    
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="Shortcut Directory" Foreground="#F3F3F3" FontSize="20" FontWeight="Bold"/>
+            <TextBlock Text="Manage all configured shortcuts in a tabular layout." Foreground="#8E8E93" FontSize="12" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1">
+            <!-- Shortcuts DataGrid -->
+            <Border x:Name="GridBorder" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="12" Padding="12">
+                <DataGrid x:Name="GridShortcuts" AutoGenerateColumns="False" CanUserAddRows="False" 
+                          Background="Transparent" BorderThickness="0" Foreground="#F3F3F3" RowBackground="Transparent"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#1F1F22"
+                          RowHeaderWidth="0" IsReadOnly="True" SelectionMode="Single">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="#8E8E93"/>
+                            <Setter Property="Padding" Value="12,10"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="FontSize" Value="12"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="#262629"/>
+                        </Style>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="12,14"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Foreground" Value="#F3F3F3"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#1A2D3C"/>
+                                    <Setter Property="Foreground" Value="#0A84FF"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Shortcut" Width="180">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0">
+                                        <!-- Clean Icon Base -->
+                                        <Grid Width="24" Height="24" Margin="0,0,10,0">
+                                            <!-- Fallback Border -->
+                                            <Border x:Name="FallbackIconBorder" Width="24" Height="24" CornerRadius="12" Background="#1C1C1F" BorderBrush="#262629" BorderThickness="1">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ResolvedIcon}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding FallbackText}" Foreground="#0A84FF" FontSize="9" FontWeight="Bold"
+                                                           FontFamily="Segoe UI, Segoe MDL2 Assets, Arial"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <!-- Real Icon -->
+                                            <Image x:Name="RealIconImage" Source="{Binding ResolvedIcon}" Width="16" Height="16" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality">
+                                                <Image.Style>
+                                                    <Style TargetType="Image">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="Source" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
+                                            </Image>
+                                        </Grid>
+                                        
+                                        <TextBlock Text="{Binding Title}" Foreground="#F3F3F3" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="13"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Type" Binding="{Binding Action.Type}" Width="100"/>
+                        <DataGridTextColumn Header="Target Path / URL" Binding="{Binding Action.Target}" Width="*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                    <Setter Property="ToolTip" Value="{Binding Action.Target}"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Coordinates" Width="120">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0:F0}%, {1:F0}%">
+                                    <Binding Path="X"/>
+                                    <Binding Path="Y"/>
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- Empty State -->
+            <StackPanel x:Name="EmptyStateText" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed" Margin="20">
+                <TextBlock Text="No shortcuts yet" Foreground="#F3F3F3" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                <TextBlock Text="Add your first app, folder, website, or file in the Canvas Editor." Foreground="#8E8E93" FontSize="12" Margin="0,8,0,16" HorizontalAlignment="Center"/>
+                <Button Content="Go to Canvas Editor" Style="{StaticResource AccentButtonStyle}" Width="160" Click="BtnGoToCanvas_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

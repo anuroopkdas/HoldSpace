@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>HoldSpace</RootNamespace>
+    <AssemblyName>HoldSpace</AssemblyName>
+    <Version>0.1.0-beta</Version>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Product>HoldSpace</Product>
+    <Description>Fast hotkey launcher overlay for your apps, folders, files, websites, and system actions.</Description>
+    <Copyright>Copyright © 2026 HoldSpace Team</Copyright>
+  </PropertyGroup>
+
+</Project>

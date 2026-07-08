@@ -1,0 +1,88 @@
+<Window x:Class="HoldSpace.CreateModeDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Create New Mode" Width="440" Height="440"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#0C0C0D" Foreground="#F3F3F3"
+        FontFamily="Segoe UI">
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="New Mode" FontSize="18" FontWeight="Bold" Foreground="#F3F3F3"/>
+            <TextBlock Text="Choose a name and starter template." FontSize="12" Foreground="#8E8E93" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Mode Name -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,16">
+            <TextBlock Text="MODE NAME" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,8"/>
+            <TextBox x:Name="TxtName" Height="36" Padding="10,8" FontSize="13"
+                     Background="#131315" Foreground="#F3F3F3" BorderBrush="#262629" BorderThickness="1"/>
+        </StackPanel>
+
+        <!-- Template Selector -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,16">
+            <TextBlock Text="STARTER TEMPLATE" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,8"/>
+            <ComboBox x:Name="CmbTemplate" Height="36" FontSize="13"
+                      Background="#131315" Foreground="#F3F3F3" BorderBrush="#262629"
+                      SelectionChanged="CmbTemplate_SelectionChanged"/>
+        </StackPanel>
+
+        <!-- Preview -->
+        <Border Grid.Row="3" Background="#0A0A0B" BorderBrush="#1F1F22" BorderThickness="1" CornerRadius="8" Padding="14">
+            <StackPanel>
+                <TextBlock Text="SHORTCUTS PREVIEW" Foreground="#8E8E93" FontSize="10" FontWeight="Bold" Margin="0,0,0,10"/>
+                <ItemsControl x:Name="PreviewList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="0,3">
+                                <TextBlock Text="·" Foreground="#3A3A3C" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding}" Foreground="#AFAFAF" FontSize="12"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
+        <!-- Actions -->
+        <Grid Grid.Row="4" Margin="0,20,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Content="Cancel" Width="90" Height="36" Margin="0,0,10,0"
+                    Background="#1C1C1E" Foreground="#F3F3F3" BorderBrush="#262629" BorderThickness="1"
+                    Cursor="Hand" Click="BtnCancel_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Grid.Column="2" x:Name="BtnCreate" Content="Create Mode" Width="120" Height="36"
+                    Background="#0A84FF" Foreground="#FFFFFF" BorderThickness="0"
+                    FontWeight="SemiBold" Cursor="Hand" Click="BtnCreate_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="8" Background="{TemplateBinding Background}" Padding="0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
