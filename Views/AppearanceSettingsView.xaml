@@ -54,7 +54,8 @@
                             </StackPanel>
                         </Grid>
                         <TextBlock Text="Control backdrop translucency and visibility when dimmed." Foreground="#8E8E93" FontSize="11" Margin="0,4,0,16"/>
-                        <Slider x:Name="SliderOpacity" Minimum="20" Maximum="100" Value="80" TickFrequency="5" IsSnapToTickEnabled="True"/>
+                        <Slider x:Name="SliderOpacity" Minimum="20" Maximum="100" Value="80" TickFrequency="5" IsSnapToTickEnabled="True"
+                                ValueChanged="SliderOpacity_ValueChanged"/>
                     </StackPanel>
                 </Border>
 
@@ -71,7 +72,8 @@
                             </StackPanel>
                         </Grid>
                         <TextBlock Text="Duration of card zoom and glow transitions when hovered." Foreground="#8E8E93" FontSize="11" Margin="0,4,0,16"/>
-                        <Slider x:Name="SliderAnim" Minimum="50" Maximum="500" Value="150" TickFrequency="25" IsSnapToTickEnabled="True"/>
+                        <Slider x:Name="SliderAnim" Minimum="50" Maximum="500" Value="150" TickFrequency="25" IsSnapToTickEnabled="True"
+                                ValueChanged="SliderAnim_ValueChanged"/>
                     </StackPanel>
                 </Border>
 

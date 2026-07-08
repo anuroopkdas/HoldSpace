@@ -26,8 +26,8 @@ if ($LASTEXITCODE -ne 0) {
 
 # 3. Copy documentation files to publish directory
 Write-Host "Copying documentation..." -ForegroundColor Yellow
-Copy-Item -Path "README_BETA.md" -Destination $PublishDir
-Copy-Item -Path "RELEASE_NOTES.md" -Destination $PublishDir
+if (Test-Path "README_BETA.md") { Copy-Item -Path "README_BETA.md" -Destination $PublishDir }
+if (Test-Path "RELEASE_NOTES.md") { Copy-Item -Path "RELEASE_NOTES.md" -Destination $PublishDir }
 
 # 4. Create Portable ZIP
 Write-Host "Creating Portable ZIP package..." -ForegroundColor Yellow

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoldSpace"
         mc:Ignorable="d"
-        Title="Welcome to HoldSpace" Height="480" Width="640"
+        Title="Welcome to HoldSpace" Height="500" Width="760"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         MouseDown="Window_MouseDown">
@@ -13,15 +13,16 @@
     <Window.Resources>
         <!-- Onboarding Custom Toggle Card Style -->
         <Style x:Key="OnboardingCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="#131315"/>
+            <Setter Property="Background" Value="#1C1C1F"/>
             <Setter Property="BorderBrush" Value="#262629"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="10,8"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="BorderBrush" Value="#3A3A3D"/>
+                    <Setter Property="Background" Value="#252528"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -44,7 +45,7 @@
                 <TextBlock Text="Hold" Foreground="{StaticResource TextPrimary}" FontSize="16" FontWeight="Bold"/>
                 <TextBlock Text="Space" Foreground="{StaticResource AccentBrush}" FontSize="16" FontWeight="Bold"/>
             </StackPanel>
-            <TextBlock Text="First-Run Onboarding" Foreground="{StaticResource TextSecondary}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBlock Text="Onboarding" Foreground="{StaticResource TextSecondary}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
         </Grid>
 
         <Border Grid.Row="0" Height="1" Background="#262629" Margin="0,28,0,0"/>
@@ -62,7 +63,7 @@
 
                     <StackPanel Grid.Row="0" Margin="0,0,0,16">
                         <TextBlock Text="Welcome to HoldSpace" Foreground="#F3F3F3" FontSize="24" FontWeight="Bold"/>
-                        <TextBlock Text="Hold a key to reveal your personal shortcut canvas. Hover over an item, release the key, and launch instantly." 
+                        <TextBlock Text="Hold a key to reveal your canvas. Hover over an item, release the key, and launch instantly." 
                                    Foreground="#8E8E93" FontSize="13" TextWrapping="Wrap" LineHeight="20" Margin="0,8,0,0"/>
                     </StackPanel>
 
@@ -201,67 +202,140 @@
                         <TextBlock Text="Add your first shortcuts" Foreground="#F3F3F3" FontSize="24" FontWeight="Bold"/>
                         <TextBlock Text="Select folder path or website shortcuts to pre-populate your launcher canvas." Foreground="#8E8E93" FontSize="13" Margin="0,4,0,0"/>
                     </StackPanel>
+                    <!-- Bento Layout Grid -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <!-- Core Windows (Left) -->
+                            <ColumnDefinition Width="1*"/>
+                            <!-- System Utilities (Middle) -->
+                            <ColumnDefinition Width="1.2*"/>
+                            <!-- Weblinks (Right) -->
+                            <ColumnDefinition Width="1.2*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <!-- Shortcuts Grid Selection List -->
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                        <WrapPanel Orientation="Horizontal" Margin="-4">
-                            <!-- File Explorer -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkExplorer" Style="{StaticResource ToggleSwitchStyle}" Content="File Explorer" IsChecked="True"/>
-                                </Grid>
-                            </Border>
+                        <!-- Core Windows -->
+                        <Border Grid.Column="0" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,6,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="CORE WINDOWS" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <StackPanel Grid.Row="1" VerticalAlignment="Top">
+                                    <!-- Downloads -->
+                                    <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                        <CheckBox x:Name="ChkDownloads" Style="{StaticResource ToggleSwitchStyle}" Content="Downloads Folder" IsChecked="True"/>
+                                    </Border>
+                                    <!-- Documents -->
+                                    <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                        <CheckBox x:Name="ChkDocuments" Style="{StaticResource ToggleSwitchStyle}" Content="Documents Folder" IsChecked="False"/>
+                                    </Border>
+                                    <!-- Desktop -->
+                                    <Border Style="{StaticResource OnboardingCardStyle}" MouseLeftButtonDown="ShortcutCard_Click">
+                                        <CheckBox x:Name="ChkDesktop" Style="{StaticResource ToggleSwitchStyle}" Content="Desktop Folder" IsChecked="False"/>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
 
-                            <!-- Downloads -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkDownloads" Style="{StaticResource ToggleSwitchStyle}" Content="Downloads Folder" IsChecked="True"/>
-                                </Grid>
-                            </Border>
+                        <!-- System Utilities -->
+                        <Border Grid.Column="1" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="8" Padding="12" Margin="6,0,6,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="SYSTEM UTILITIES" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <StackPanel VerticalAlignment="Top">
+                                        <!-- Task Manager -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkTaskManager" Style="{StaticResource ToggleSwitchStyle}" Content="Task Manager" IsChecked="True"/>
+                                        </Border>
+                                        <!-- Command Prompt -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkTerminal" Style="{StaticResource ToggleSwitchStyle}" Content="Command Prompt" IsChecked="False"/>
+                                        </Border>
+                                        <!-- PowerShell -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkPowerShell" Style="{StaticResource ToggleSwitchStyle}" Content="PowerShell" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Snipping Tool -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkSnippingTool" Style="{StaticResource ToggleSwitchStyle}" Content="Snipping Tool" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Calculator -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkCalculator" Style="{StaticResource ToggleSwitchStyle}" Content="Calculator" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Windows Settings -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkSettings" Style="{StaticResource ToggleSwitchStyle}" Content="System Settings" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Control Panel -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkControlPanel" Style="{StaticResource ToggleSwitchStyle}" Content="Control Panel" IsChecked="False"/>
+                                        </Border>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
 
-                            <!-- Documents -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkDocuments" Style="{StaticResource ToggleSwitchStyle}" Content="Documents Folder" IsChecked="False"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Microsoft Edge -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkEdge" Style="{StaticResource ToggleSwitchStyle}" Content="Microsoft Edge" IsChecked="True"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Terminal cmd -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkTerminal" Style="{StaticResource ToggleSwitchStyle}" Content="Command Prompt" IsChecked="True"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- ChatGPT website -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkChatGPT" Style="{StaticResource ToggleSwitchStyle}" Content="ChatGPT URL" IsChecked="False"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- GitHub website -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkGitHub" Style="{StaticResource ToggleSwitchStyle}" Content="GitHub URL" IsChecked="True"/>
-                                </Grid>
-                            </Border>
-
-                            <!-- Google website -->
-                            <Border Style="{StaticResource OnboardingCardStyle}" Width="184" Margin="4" MouseLeftButtonDown="ShortcutCard_Click">
-                                <Grid>
-                                    <CheckBox x:Name="ChkGoogle" Style="{StaticResource ToggleSwitchStyle}" Content="Google Search URL" IsChecked="False"/>
-                                </Grid>
-                            </Border>
-                        </WrapPanel>
-                    </ScrollViewer>
+                        <!-- Weblinks -->
+                        <Border Grid.Column="2" Background="#131315" BorderBrush="#262629" BorderThickness="1" CornerRadius="8" Padding="12" Margin="6,0,0,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="WEBLINKS" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <StackPanel VerticalAlignment="Top">
+                                        <!-- Google Search -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkGoogle" Style="{StaticResource ToggleSwitchStyle}" Content="Google Search" IsChecked="True"/>
+                                        </Border>
+                                        <!-- ChatGPT -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkChatGPT" Style="{StaticResource ToggleSwitchStyle}" Content="ChatGPT" IsChecked="False"/>
+                                        </Border>
+                                        <!-- GitHub -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkGitHub" Style="{StaticResource ToggleSwitchStyle}" Content="GitHub" IsChecked="False"/>
+                                        </Border>
+                                        <!-- StackOverflow -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkStackOverflow" Style="{StaticResource ToggleSwitchStyle}" Content="StackOverflow" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Notion -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkNotion" Style="{StaticResource ToggleSwitchStyle}" Content="Notion" IsChecked="False"/>
+                                        </Border>
+                                        <!-- YouTube -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkYouTube" Style="{StaticResource ToggleSwitchStyle}" Content="YouTube" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Google Drive -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkGoogleDrive" Style="{StaticResource ToggleSwitchStyle}" Content="Google Drive" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Gmail -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkGmail" Style="{StaticResource ToggleSwitchStyle}" Content="Gmail" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Slack -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" Margin="0,0,0,6" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkSlack" Style="{StaticResource ToggleSwitchStyle}" Content="Slack" IsChecked="False"/>
+                                        </Border>
+                                        <!-- Figma -->
+                                        <Border Style="{StaticResource OnboardingCardStyle}" MouseLeftButtonDown="ShortcutCard_Click">
+                                            <CheckBox x:Name="ChkFigma" Style="{StaticResource ToggleSwitchStyle}" Content="Figma" IsChecked="False"/>
+                                        </Border>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+                    </Grid>
                 </Grid>
             </TabItem>
 

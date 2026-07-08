@@ -278,14 +278,7 @@ namespace HoldSpace
 
             var itemsToAdd = new List<CanvasItem>();
 
-            if (ChkExplorer.IsChecked == true)
-            {
-                itemsToAdd.Add(new CanvasItem
-                {
-                    Title = "Explorer",
-                    Action = new ShortcutAction { Type = "app", Target = "explorer.exe" }
-                });
-            }
+            // 1. Core Windows
             if (ChkDownloads.IsChecked == true)
             {
                 string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
@@ -304,12 +297,23 @@ namespace HoldSpace
                     Action = new ShortcutAction { Type = "folder", Target = path }
                 });
             }
-            if (ChkEdge.IsChecked == true)
+            if (ChkDesktop.IsChecked == true)
+            {
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Desktop",
+                    Action = new ShortcutAction { Type = "folder", Target = path }
+                });
+            }
+
+            // 2. System Utilities
+            if (ChkTaskManager.IsChecked == true)
             {
                 itemsToAdd.Add(new CanvasItem
                 {
-                    Title = "Edge",
-                    Action = new ShortcutAction { Type = "app", Target = "msedge.exe" }
+                    Title = "Task Manager",
+                    Action = new ShortcutAction { Type = "app", Target = "taskmgr.exe" }
                 });
             }
             if (ChkTerminal.IsChecked == true)
@@ -318,6 +322,56 @@ namespace HoldSpace
                 {
                     Title = "Terminal",
                     Action = new ShortcutAction { Type = "app", Target = "cmd.exe" }
+                });
+            }
+            if (ChkPowerShell.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "PowerShell",
+                    Action = new ShortcutAction { Type = "app", Target = "powershell.exe" }
+                });
+            }
+            if (ChkSnippingTool.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Snipping",
+                    Action = new ShortcutAction { Type = "app", Target = "snippingtool.exe" }
+                });
+            }
+            if (ChkCalculator.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Calculator",
+                    Action = new ShortcutAction { Type = "app", Target = "calc.exe" }
+                });
+            }
+            if (ChkSettings.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Settings",
+                    Action = new ShortcutAction { Type = "website", Target = "ms-settings:" }
+                });
+            }
+            if (ChkControlPanel.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Control Panel",
+                    Action = new ShortcutAction { Type = "app", Target = "control.exe" }
+                });
+            }
+
+            // 3. Weblinks
+            if (ChkGoogle.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Google",
+                    Action = new ShortcutAction { Type = "website", Target = "https://www.google.com" }
                 });
             }
             if (ChkChatGPT.IsChecked == true)
@@ -336,42 +390,113 @@ namespace HoldSpace
                     Action = new ShortcutAction { Type = "website", Target = "https://github.com" }
                 });
             }
-            if (ChkGoogle.IsChecked == true)
+            if (ChkStackOverflow.IsChecked == true)
             {
                 itemsToAdd.Add(new CanvasItem
                 {
-                    Title = "Google",
-                    Action = new ShortcutAction { Type = "website", Target = "https://www.google.com" }
+                    Title = "StackOverflow",
+                    Action = new ShortcutAction { Type = "website", Target = "https://stackoverflow.com" }
+                });
+            }
+            if (ChkNotion.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Notion",
+                    Action = new ShortcutAction { Type = "website", Target = "https://notion.so" }
+                });
+            }
+            if (ChkYouTube.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "YouTube",
+                    Action = new ShortcutAction { Type = "website", Target = "https://youtube.com" }
+                });
+            }
+            if (ChkGoogleDrive.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Google Drive",
+                    Action = new ShortcutAction { Type = "website", Target = "https://drive.google.com" }
+                });
+            }
+            if (ChkGmail.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Gmail",
+                    Action = new ShortcutAction { Type = "website", Target = "https://mail.google.com" }
+                });
+            }
+            if (ChkSlack.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Slack",
+                    Action = new ShortcutAction { Type = "website", Target = "https://slack.com" }
+                });
+            }
+            if (ChkFigma.IsChecked == true)
+            {
+                itemsToAdd.Add(new CanvasItem
+                {
+                    Title = "Figma",
+                    Action = new ShortcutAction { Type = "website", Target = "https://figma.com" }
                 });
             }
 
-            // Standard layout grid coordinate maps
-            double[,] positions = new double[,] {
-                { 35, 35 },
-                { 65, 35 },
-                { 35, 65 },
-                { 65, 65 },
-                { 50, 20 },
-                { 50, 80 },
-                { 20, 50 },
-                { 80, 50 }
-            };
-
+            // Distribute items in concentric circles on the canvas (no overlapping)
             for (int i = 0; i < itemsToAdd.Count; i++)
             {
                 var item = itemsToAdd[i];
                 item.Id = Guid.NewGuid().ToString();
 
-                if (i < positions.GetLength(0))
+                double radius = 18.0;
+                double centerX = 50.0;
+                double centerY = 50.0;
+                double angle;
+
+                if (itemsToAdd.Count <= 6)
                 {
-                    item.X = positions[i, 0];
-                    item.Y = positions[i, 1];
+                    angle = (2 * Math.PI * i) / itemsToAdd.Count;
+                }
+                else if (itemsToAdd.Count <= 14)
+                {
+                    if (i < 5)
+                    {
+                        radius = 16.0;
+                        angle = (2 * Math.PI * i) / 5;
+                    }
+                    else
+                    {
+                        radius = 32.0;
+                        angle = (2 * Math.PI * (i - 5)) / (itemsToAdd.Count - 5);
+                    }
                 }
                 else
                 {
-                    item.X = 50.0;
-                    item.Y = 50.0;
+                    // concentric layers (inner: 4, middle: 8, outer: remaining)
+                    if (i < 4)
+                    {
+                        radius = 14.0;
+                        angle = (2 * Math.PI * i) / 4;
+                    }
+                    else if (i < 12)
+                    {
+                        radius = 26.0;
+                        angle = (2 * Math.PI * (i - 4)) / 8;
+                    }
+                    else
+                    {
+                        radius = 38.0;
+                        angle = (2 * Math.PI * (i - 12)) / (itemsToAdd.Count - 12);
+                    }
                 }
+
+                item.X = Math.Round(centerX + radius * Math.Cos(angle), 1);
+                item.Y = Math.Round(centerY + radius * Math.Sin(angle), 1);
 
                 _settingsService.CurrentLayout.Items.Add(item);
             }

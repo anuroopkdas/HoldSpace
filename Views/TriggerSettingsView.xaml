@@ -77,6 +77,9 @@
                         
                         <Slider x:Name="SliderDelay" Minimum="50" Maximum="1000" Value="120" TickFrequency="10" IsSnapToTickEnabled="True"
                                 ValueChanged="SliderDelay_ValueChanged" Margin="0,8,0,0"/>
+
+                        <!-- Dynamic Delay Quip -->
+                        <TextBlock x:Name="TxtDelayQuip" Text="A human blink takes about 100ms. Blink and you'll trigger it!" Foreground="#FF9F0A" FontSize="11" FontStyle="Italic" Margin="0,12,0,0"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

@@ -292,12 +292,8 @@
                                     <Button Grid.Column="1" Content="Reset Onboarding" Style="{StaticResource DefaultButtonStyle}" Width="150" HorizontalAlignment="Right" Click="BtnRestartOnboarding_Click"/>
                                 </Grid>
 
-                                <Border Height="1" Background="#262629" Margin="0,16"/>
-
-                                <TextBlock Text="HoldSpace is a productivity tool built to launch applications, folders, files, or websites instantly by holding down a trigger hotkey." 
-                                           Foreground="#8E8E93" FontSize="11" TextWrapping="Wrap" LineHeight="16"/>
                                 <TextBlock Text="Copyright © 2026 HoldSpace Team. All rights reserved." 
-                                           Foreground="#55555A" FontSize="10" Margin="0,10,0,0"/>
+                                           Foreground="#55555A" FontSize="10" Margin="0,16,0,0"/>
                             </StackPanel>
                         </Border>
                     </Grid>
