@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HoldSpace"
         mc:Ignorable="d"
-        Title="Welcome to HoldSpace" Height="500" Width="760"
+        Title="Welcome to HoldSpace" Height="500" Width="760" Icon="app_icon.ico"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         MouseDown="Window_MouseDown">

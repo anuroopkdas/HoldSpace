@@ -25,9 +25,36 @@ namespace HoldSpace.Services
             _settingsService = settingsService;
             _onProfileChanged = onProfileChanged;
 
+            Icon? appIcon = null;
+            try
+            {
+                var iconUri = new Uri("pack://application:,,,/app_icon.ico");
+                var iconStream = Application.GetResourceStream(iconUri)?.Stream;
+                if (iconStream != null)
+                {
+                    appIcon = new Icon(iconStream);
+                }
+            }
+            catch
+            {
+                try
+                {
+                    string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                    if (exePath.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+                    {
+                        exePath = exePath.Substring(0, exePath.Length - 4) + ".exe";
+                    }
+                    if (System.IO.File.Exists(exePath))
+                    {
+                        appIcon = Icon.ExtractAssociatedIcon(exePath);
+                    }
+                }
+                catch { }
+            }
+
             _notifyIcon = new NotifyIcon
             {
-                Icon = SystemIcons.Application,
+                Icon = appIcon ?? SystemIcons.Application,
                 Text = "HoldSpace",
                 Visible = true
             };

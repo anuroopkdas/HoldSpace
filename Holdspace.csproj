@@ -15,6 +15,11 @@
     <Product>HoldSpace</Product>
     <Description>Fast hotkey launcher overlay for your apps, folders, files, websites, and system actions.</Description>
     <Copyright>Copyright © 2026 HoldSpace Team</Copyright>
+    <ApplicationIcon>app_icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="app_icon.ico" />
+  </ItemGroup>
 
 </Project>
