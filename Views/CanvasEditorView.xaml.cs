@@ -269,6 +269,7 @@ namespace HoldSpace.Views
                 NoSelectionPanel.Visibility = Visibility.Collapsed;
 
                 TxtTitle.Text = _selectedItem.Title;
+                TxtIconPath.Text = _selectedItem.IconPath;
                 TxtTarget.Text = _selectedItem.Action.Target;
                 TxtArguments.Text = _selectedItem.Action.Arguments;
                 TxtCoordX.Text = _selectedItem.X.ToString("F1");
@@ -383,6 +384,35 @@ namespace HoldSpace.Views
                 {
                     SetUnsavedChanges(true);
                 }
+            }
+        }
+
+        private void TxtIconPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_selectedItem != null && TxtIconPath != null)
+            {
+                _selectedItem.IconPath = TxtIconPath.Text;
+
+                if (!_isBindingProperties)
+                {
+                    SetUnsavedChanges(true);
+                }
+            }
+        }
+
+        private void BtnBrowseIcon_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedItem == null) return;
+
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Select Custom Icon File",
+                Filter = "Image Files (*.ico;*.png;*.jpg;*.jpeg;*.gif;*.bmp)|*.ico;*.png;*.jpg;*.jpeg;*.gif;*.bmp|All Files (*.*)|*.*"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                TxtIconPath.Text = dialog.FileName;
             }
         }
 
@@ -864,7 +894,7 @@ namespace HoldSpace.Views
 
             if (_selectedItem != null && (e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down))
             {
-                if (Keyboard.FocusedElement is System.Windows.Controls.TextBox tb && (tb.Name == "TxtCoordX" || tb.Name == "TxtCoordY" || tb.Name == "TxtTitle" || tb.Name == "TxtTarget" || tb.Name == "TxtArguments"))
+                if (Keyboard.FocusedElement is System.Windows.Controls.TextBox tb && (tb.Name == "TxtCoordX" || tb.Name == "TxtCoordY" || tb.Name == "TxtTitle" || tb.Name == "TxtTarget" || tb.Name == "TxtArguments" || tb.Name == "TxtIconPath"))
                 {
                     return;
                 }

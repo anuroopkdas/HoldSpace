@@ -128,7 +128,15 @@ namespace HoldSpace.Models
         public string IconPath
         {
             get => _iconPath;
-            set => SetProperty(ref _iconPath, value);
+            set
+            {
+                if (SetProperty(ref _iconPath, value))
+                {
+                    RefreshIconAsync();
+                    OnPropertyChanged(nameof(DisplayIcon));
+                    OnPropertyChanged(nameof(FallbackText));
+                }
+            }
         }
 
         public double X
@@ -153,6 +161,7 @@ namespace HoldSpace.Models
         {
             try
             {
+                HoldSpace.Services.IconService.EvictFromCache(this.Id);
                 var icon = await HoldSpace.Services.IconService.GetIconForShortcutAsync(this);
                 if (icon != null)
                 {

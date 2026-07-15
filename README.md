@@ -1,6 +1,26 @@
 # HoldSpace
 
-HoldSpace is a Windows desktop application that serves as a **hold-to-reveal overlay launcher**. By holding down a designated trigger key (default: Caps Lock), a full-screen overlay appears displaying custom shortcuts. Moving the mouse over a shortcut and releasing the trigger key instantly launches it. Releasing the key outside of any shortcut, or pressing `Esc`, cancels the overlay.
+**Hold one key. Your screen becomes your personal shortcut canvas. Hover, release, launch.**
+
+![HoldSpace Banner](assets/banner.png)
+
+HoldSpace is a Windows productivity overlay launcher. It appears only when you hold your trigger key, letting you launch apps, folders, websites, files, and system actions without cluttering your desktop.
+
+## Preview
+
+### Dashboard
+
+![HoldSpace Dashboard](assets/screenshot-dashboard.jpg)
+
+### Canvas Editor
+
+![HoldSpace Canvas Editor](assets/screenshot-canvas-editor.jpg)
+
+### Modes
+
+![HoldSpace Modes](assets/screenshot-modes.jpg)
+
+---
 
 ## Features
 

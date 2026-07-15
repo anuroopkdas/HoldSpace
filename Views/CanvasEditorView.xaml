@@ -295,6 +295,16 @@
                                 
                                 <TextBlock Text="Title" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,6"/>
                                 <TextBox x:Name="TxtTitle" Padding="8" Margin="0,0,0,14" TextChanged="TxtTitle_TextChanged" GotFocus="InspectorField_GotFocus"/>
+
+                                <TextBlock Text="Custom Icon Path (Optional)" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,6"/>
+                                <Grid Margin="0,0,0,14">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="TxtIconPath" Grid.Column="0" Padding="8" TextChanged="TxtIconPath_TextChanged" GotFocus="InspectorField_GotFocus"/>
+                                    <Button x:Name="BtnBrowseIcon" Grid.Column="1" Content="..." Style="{StaticResource DefaultButtonStyle}" Width="36" Margin="6,0,0,0" Click="BtnBrowseIcon_Click"/>
+                                </Grid>
         
                                 <TextBlock Text="Shortcut Type" Foreground="#8E8E93" FontSize="11" FontWeight="Bold" Margin="0,0,0,6"/>
                                 <ComboBox x:Name="ComboType" Padding="8" Margin="0,0,0,16" SelectionChanged="ComboType_SelectionChanged" GotFocus="InspectorField_GotFocus">

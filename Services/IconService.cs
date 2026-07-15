@@ -80,7 +80,11 @@ namespace HoldSpace.Services
 
             ImageSource? resolved = null;
 
-            if (item.Action.Type.Equals("website", StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(item.IconPath))
+            {
+                resolved = ResolveIcon(item);
+            }
+            else if (item.Action.Type.Equals("website", StringComparison.OrdinalIgnoreCase))
             {
                 resolved = await ResolveWebsiteIconAsync(item.Action.Target);
             }
@@ -101,8 +105,150 @@ namespace HoldSpace.Services
             _iconCache.Clear();
         }
 
+        public static void EvictFromCache(string key)
+        {
+            _iconCache.TryRemove(key, out _);
+        }
+
+        private static string GetMd5Hash(string input)
+        {
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                return Convert.ToHexString(hashBytes);
+            }
+        }
+
+        private static string GetExecutablePathOnly(string target)
+        {
+            if (string.IsNullOrEmpty(target)) return string.Empty;
+            target = target.Trim();
+
+            if (target.StartsWith("\""))
+            {
+                int nextQuote = target.IndexOf("\"", 1);
+                if (nextQuote > 1)
+                {
+                    return target.Substring(1, nextQuote - 1).Trim();
+                }
+            }
+
+            int exeIndex = target.IndexOf(".exe", StringComparison.OrdinalIgnoreCase);
+            if (exeIndex > 0)
+            {
+                return target.Substring(0, exeIndex + 4).Trim(' ', '"');
+            }
+
+            int spaceIndex = target.IndexOf(' ');
+            if (spaceIndex > 0)
+            {
+                return target.Substring(0, spaceIndex).Trim(' ', '"');
+            }
+
+            return target.Trim(' ', '"');
+        }
+
+        private static string? ResolveFullExePath(string exePath)
+        {
+            if (File.Exists(exePath)) return exePath;
+
+            var paths = Environment.GetEnvironmentVariable("PATH")?.Split(';');
+            if (paths != null)
+            {
+                foreach (var p in paths)
+                {
+                    try
+                    {
+                        string fullPath = Path.Combine(p.Trim(), exePath);
+                        if (File.Exists(fullPath)) return fullPath;
+                    }
+                    catch { }
+                }
+            }
+
+            string[] commonPaths = {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), exePath),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), exePath),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86), exePath)
+            };
+            foreach (var cp in commonPaths)
+            {
+                if (File.Exists(cp)) return cp;
+            }
+
+            return null;
+        }
+
+        private static ImageSource? ExtractIconFromPath(string path)
+        {
+            try
+            {
+                path = GetExecutablePathOnly(path);
+                if (string.IsNullOrEmpty(path)) return null;
+
+                if (!Path.IsPathRooted(path))
+                {
+                    string? resolved = ResolveFullExePath(path);
+                    if (resolved != null) path = resolved;
+                }
+
+                if (!File.Exists(path) && !Directory.Exists(path))
+                {
+                    return null;
+                }
+
+                string cacheName = GetMd5Hash(path) + ".png";
+                string cachePath = Path.Combine(GetCacheDirectory("Extracted"), cacheName);
+
+                if (File.Exists(cachePath))
+                {
+                    return LoadImageFromFile(cachePath);
+                }
+
+                SHFILEINFO shinfo = new SHFILEINFO();
+                IntPtr hSuccess = SHGetFileInfo(
+                    path,
+                    0,
+                    ref shinfo,
+                    (uint)Marshal.SizeOf(shinfo),
+                    SHGFI_ICON | SHGFI_LARGEICON);
+
+                if (shinfo.hIcon != IntPtr.Zero)
+                {
+                    using (var icon = System.Drawing.Icon.FromHandle(shinfo.hIcon))
+                    {
+                        using (var bitmap = icon.ToBitmap())
+                        {
+                            bitmap.Save(cachePath, System.Drawing.Imaging.ImageFormat.Png);
+                        }
+                    }
+                    DestroyIcon(shinfo.hIcon);
+                    return LoadImageFromFile(cachePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to extract icon for {path}: {ex.Message}");
+            }
+            return null;
+        }
+
         private static ImageSource? ResolveIcon(CanvasItem item)
         {
+            if (!string.IsNullOrEmpty(item.IconPath))
+            {
+                try
+                {
+                    if (File.Exists(item.IconPath))
+                    {
+                        var customImg = LoadImageFromFile(item.IconPath);
+                        if (customImg != null) return customImg;
+                    }
+                }
+                catch { }
+            }
+
             string type = item.Action.Type.ToLowerInvariant();
             string target = item.Action.Target ?? "";
 
@@ -111,11 +257,12 @@ namespace HoldSpace.Services
                 switch (type)
                 {
                     case "app":
-                        return ExtractExeIcon(target);
+                        return ExtractIconFromPath(target);
                     case "folder":
-                        return ExtractFolderIcon();
+                        var folderIcon = ExtractIconFromPath(target);
+                        return folderIcon ?? ExtractFolderIcon();
                     case "file":
-                        return ExtractFileIcon(target);
+                        return ExtractIconFromPath(target);
                     case "website":
                         // Synchronous check of local cache first
                         string domain = GetDomainFromUrl(target);
@@ -135,45 +282,6 @@ namespace HoldSpace.Services
                 System.Diagnostics.Debug.WriteLine($"Failed to resolve icon: {ex.Message}");
             }
 
-            return null;
-        }
-
-        private static ImageSource? ExtractExeIcon(string exePath)
-        {
-            try
-            {
-                // Clean quotes or target parameters if any
-                exePath = exePath.Trim('\"', ' ');
-
-                if (string.IsNullOrEmpty(exePath) || !File.Exists(exePath))
-                {
-                    return null;
-                }
-
-                string cacheName = Path.GetFileName(exePath) + ".png";
-                string cachePath = Path.Combine(GetCacheDirectory("Apps"), cacheName);
-
-                if (File.Exists(cachePath))
-                {
-                    return LoadImageFromFile(cachePath);
-                }
-
-                using (var icon = System.Drawing.Icon.ExtractAssociatedIcon(exePath))
-                {
-                    if (icon != null)
-                    {
-                        using (var bitmap = icon.ToBitmap())
-                        {
-                            bitmap.Save(cachePath, System.Drawing.Imaging.ImageFormat.Png);
-                        }
-                        return LoadImageFromFile(cachePath);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to extract exe icon for {exePath}: {ex.Message}");
-            }
             return null;
         }
 
